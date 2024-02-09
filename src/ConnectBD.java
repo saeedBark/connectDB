@@ -27,7 +27,11 @@ public class ConnectBD {
                   System.out.println(result.getObject("age").toString());
               }
 
-             statement.executeUpdate("INSERT INTO `persone` (`id`, `nom`, `prenom`, `age`, `taill`) VALUES (NULL, 'amir', 'akram', '55', '74.3')");
+              Personne persone = new Personne("amir", "akram", 55, 74.3);
+
+
+              insertPersonne(connection, persone);
+
 
 
             // Do something with the result set if needed
@@ -41,5 +45,19 @@ public class ConnectBD {
         } catch (Exception error) {
             error.printStackTrace();
         }
+    }
+
+    private static void insertPersonne(Connection connection, Personne personne) throws SQLException {
+        String insertQuery = "INSERT INTO `personne` (`id`, `nom`, `prenom`, `age`, `taille`) VALUES (NULL, ?, ?, ?, ?)";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
+
+        preparedStatement.setString(2, personne.getPrenom());
+        preparedStatement.setInt(3, personne.getAge());
+        preparedStatement.setDouble(4, personne.getTaille());
+
+        preparedStatement.executeUpdate();
+
+        preparedStatement.close();
     }
 }
